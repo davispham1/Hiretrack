@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Internship Tracker",
+  "version": "1.0.0",
+  "description": "Manually track internships you applied to",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "Internship Tracker",
+    "default_popup": "index.html"
+  }
+}
