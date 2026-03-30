@@ -107,7 +107,7 @@ function App() {
       <div className="content">
         <header className="topHeader">
           <div>
-            <p className="eyebrow">Internship Tracker</p>
+            <p className="eyebrow">HireTrack</p>
             <h1>{profile.name || 'Your Profile'}</h1>
           </div>
           <button className="smallPrimaryBtn" onClick={openDashboard}>

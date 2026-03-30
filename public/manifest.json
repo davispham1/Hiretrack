@@ -1,11 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Internship Tracker",
+  "name": "HireTrack",
   "version": "1.0.0",
   "description": "Manually track internships you applied to",
   "permissions": ["storage"],
+  "icons": {
+    "248": "logo.png"
+  },
   "action": {
-    "default_title": "Internship Tracker",
+    "default_title": "HireTrack",
     "default_popup": "index.html"
   }
 }

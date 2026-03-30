@@ -54,6 +54,11 @@ function getStatusCounts(applications) {
   return counts
 }
 
+function getStatusPercent(count, total) {
+  if (!total) return '0%'
+  return `${Math.round((count / total) * 100)}%`
+}
+
 function buildPieBackground(statusCounts) {
   const total = Object.values(statusCounts).reduce((sum, value) => sum + value, 0)
 
@@ -244,9 +249,9 @@ function DashboardApp() {
     <div className="dashboardPage">
       <header className="dashboardHeader">
         <div>
-          <p className="dashboardEyebrow">Extension Dashboard</p>
+          <p className="dashboardEyebrow">HireTrack</p>
           <h1>Internship Applications</h1>
-          <p className="dashboardSubtext">Local demo data stored in your extension</p>
+          <p className="dashboardSubtext">A Visual Job Application Tracking System for College Students</p>
         </div>
       </header>
 
@@ -270,20 +275,24 @@ function DashboardApp() {
               </div>
             </div>
 
-            <div className="legendList compactLegend">
-              {STATUS_ORDER.map(status => (
-                <div className="legendItem" key={status}>
-                  <div className="legendLeft">
-                    <span
-                      className="legendDot"
-                      style={{ background: STATUS_COLORS[status] }}
-                    />
-                    <span>{status}</span>
-                  </div>
-                  <strong>{statusCounts[status]}</strong>
+            <div className="legendList">
+                {STATUS_ORDER.map(status => (
+                    <div className="legendItem" key={status}>
+                    <div className="legendLeft">
+                        <span
+                        className="legendDot"
+                        style={{ background: STATUS_COLORS[status] }}
+                        />
+                        <span>{status}</span>
+                    </div>
+
+                    <div className="legendRight">
+                        <strong>{statusCounts[status]}</strong>
+                        <span>{getStatusPercent(statusCounts[status], totalApplications)}</span>
+                    </div>
+                    </div>
+                ))}
                 </div>
-              ))}
-            </div>
           </div>
         </div>
 
