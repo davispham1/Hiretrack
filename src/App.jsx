@@ -21,7 +21,8 @@ function App() {
   const [applications, setApplications] = useState([])
   const [expandedIds, setExpandedIds] = useState([])
   const [profile, setProfile] = useState({
-    name: 'Your Name',
+    firstName: '',
+    lastName: '',
     email: 'you@example.com',
     phone: '',
     linkedin: '',
@@ -176,7 +177,7 @@ function App() {
         <header className="topHeader">
           <div>
             <p className="eyebrow">HireTrack</p>
-            <h1>{profile.name || 'Your Profile'}</h1>
+            <h1>{profile.firstName ? `${profile.firstName} ${profile.lastName}`.trim() : 'Your Profile'}</h1>
           </div>
           <button className="smallPrimaryBtn" onClick={openDashboard}>
             Dashboard
@@ -345,9 +346,15 @@ function App() {
               <form className="form" onSubmit={handleSaveProfile}>
                 <input
                   type="text"
-                  placeholder="Full name"
-                  value={profile.name}
-                  onChange={e => setProfile(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="First name"
+                  value={profile.firstName}
+                  onChange={e => setProfile(prev => ({ ...prev, firstName: e.target.value }))}
+                />
+                <input
+                  type="text"
+                  placeholder="Last name"
+                  value={profile.lastName}
+                  onChange={e => setProfile(prev => ({ ...prev, lastName: e.target.value }))}
                 />
                 <input
                   type="email"

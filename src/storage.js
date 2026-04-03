@@ -70,7 +70,8 @@ export async function getProfile() {
       chrome.storage.local.get([PROFILE_KEY], result => {
         resolve(
           result[PROFILE_KEY] || {
-            name: 'Your Name',
+            firstName: '',
+            lastName: '',
             email: 'you@example.com',
             phone: '',
             linkedin: '',
@@ -87,7 +88,8 @@ export async function getProfile() {
   return raw
     ? JSON.parse(raw)
     : {
-        name: 'Your Name',
+        firstName: '',
+        lastName: '',
         email: 'you@example.com',
         phone: '',
         linkedin: '',

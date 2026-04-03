@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Stripe - Backend Engineer Intern · Lever</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+            background: #fafafa;
+            color: #32325d;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-brand { display: flex; align-items: center; gap: 10px; }
+        .lever-dot {
+            width: 28px; height: 28px;
+            background: #5433ff;
+            border-radius: 50%;
+        }
+        .header-brand span { font-weight: 700; font-size: 16px; color: #5433ff; }
+        .company-name { font-size: 14px; color: #888; }
+
+        .hero {
+            background: linear-gradient(135deg, #635bff 0%, #8a82ff 100%);
+            padding: 36px 40px;
+            color: white;
+        }
+        .hero .badge {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .hero .meta { font-size: 14px; opacity: 0.85; display: flex; gap: 16px; flex-wrap: wrap; }
+        .hero .meta span { display: flex; align-items: center; gap: 4px; }
+
+        .content {
+            max-width: 680px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+
+        .apply-box {
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e6e6e6;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .apply-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .apply-box p { font-size: 13px; color: #888; margin-bottom: 24px; }
+
+        .field { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #32325d;
+            margin-bottom: 6px;
+        }
+        .req { color: #ff4757; }
+        input[type=text],
+        input[type=email],
+        input[type=tel],
+        input[type=url] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #32325d;
+            outline: none;
+            transition: border 0.15s, box-shadow 0.15s;
+        }
+        input:focus {
+            border-color: #635bff;
+            box-shadow: 0 0 0 3px rgba(99,91,255,0.12);
+        }
+        .hint { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0;
+            color: #ccc;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .separator::before, .separator::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e6e6e6;
+        }
+
+        .apply-btn {
+            width: 100%;
+            background: #635bff;
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: background 0.15s;
+        }
+        .apply-btn:hover { background: #4f46e5; }
+
+        .success {
+            display: none;
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #f0f0ff;
+            border-radius: 6px;
+            color: #4f46e5;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid #c7c5ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-brand">
+        <div class="lever-dot"></div>
+        <span>Lever</span>
+    </div>
+    <div class="company-name">Stripe Careers</div>
+</div>
+
+<div class="hero">
+    <div class="badge">Open Role</div>
+    <h1 data-hiretrack-role>Backend Engineer Intern</h1>
+    <div class="meta">
+        <span data-hiretrack-company>Stripe</span>
+        <span data-hiretrack-location>San Francisco, CA</span>
+        <span>Engineering</span>
+        <span>Summer 2025</span>
+    </div>
+</div>
+
+<div class="content">
+    <div class="apply-box">
+        <h2>Apply for this position</h2>
+        <p>Tell us about yourself — it only takes a minute.</p>
+
+        <form id="applyForm">
+            <div class="row">
+                <div class="field">
+                    <label for="given-name">First name <span class="req">*</span></label>
+                    <input type="text" id="given-name" name="given-name" autocomplete="given-name" placeholder="Jane" required />
+                </div>
+                <div class="field">
+                    <label for="family-name">Last name <span class="req">*</span></label>
+                    <input type="text" id="family-name" name="family-name" autocomplete="family-name" placeholder="Smith" required />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="email">Email <span class="req">*</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="jane@example.com" required />
+                <div class="hint">We'll send your confirmation here</div>
+            </div>
+
+            <div class="field">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+1 555 000 0000" />
+            </div>
+
+            <div class="field">
+                <label for="address">Current city</label>
+                <input type="text" id="address" name="address" placeholder="San Francisco, CA" />
+            </div>
+
+            <div class="separator">Online profiles</div>
+
+            <div class="field">
+                <label for="linkedin">LinkedIn URL</label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/..." />
+            </div>
+
+            <div class="field">
+                <label for="github">GitHub URL</label>
+                <input type="url" id="github" name="github" placeholder="https://github.com/..." />
+            </div>
+
+            <div class="field">
+                <label for="portfolio">Portfolio / website</label>
+                <input type="url" id="portfolio" name="portfolio" placeholder="https://yoursite.com" />
+            </div>
+
+            <button class="apply-btn" type="submit" data-hiretrack-submit>Submit Application</button>
+        </form>
+
+        <div id="success" class="success" data-hiretrack-success>
+            Your application was sent to Stripe. Good luck!
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("applyForm").addEventListener("submit", e => {
+        e.preventDefault();
+        document.getElementById("success").style.display = "block";
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Apple - iOS Engineer Intern · Greenhouse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background: #f7f7f7;
+            color: #1a1a1a;
+            padding: 0;
+        }
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .topbar-logo {
+            width: 32px; height: 32px;
+            background: #24a47f;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800; font-size: 14px;
+        }
+        .topbar span { font-weight: 700; color: #24a47f; font-size: 16px; }
+
+        .layout {
+            max-width: 860px;
+            margin: 32px auto;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            height: fit-content;
+        }
+        .company-badge {
+            width: 56px; height: 56px;
+            background: #000;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 24px;
+            margin-bottom: 14px;
+        }
+        .sidebar h2 { font-size: 18px; margin-bottom: 4px; }
+        .sidebar .company { color: #555; font-size: 14px; margin-bottom: 10px; }
+        .sidebar .detail { font-size: 13px; color: #777; margin-bottom: 4px; }
+        .tag {
+            display: inline-block;
+            background: #e8f5ee;
+            color: #24a47f;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Form */
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 28px;
+        }
+        .form-card h2 { font-size: 20px; margin-bottom: 6px; }
+        .form-card .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
+
+        .section-heading {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+            margin: 24px 0 14px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .field { margin-bottom: 16px; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .required { color: #e53e3e; }
+        input[type=text],
+        input[type=email],
+        input[type=tel],
+        input[type=url] {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.15s;
+        }
+        input:focus { border-color: #24a47f; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .submit-btn {
+            background: #24a47f;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .submit-btn:hover { background: #1b7d61; }
+
+        .success {
+            display: none;
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #e8f5ee;
+            border-radius: 6px;
+            color: #1b7d61;
+            font-weight: 600;
+            border-left: 4px solid #24a47f;
+        }
+    </style>
+</head>
+<body>
+<div class="topbar">
+    <div class="topbar-logo">G</div>
+    <span>Greenhouse</span>
+</div>
+
+<div class="layout">
+    <div class="sidebar">
+        <div class="company-badge">🍎</div>
+        <h2 data-hiretrack-role>iOS Engineer Intern</h2>
+        <div class="company" data-hiretrack-company>Apple</div>
+        <div class="detail" data-hiretrack-location>Cupertino, CA</div>
+        <div class="detail">Summer 2025 · 12 weeks</div>
+        <span class="tag">Engineering</span>
+    </div>
+
+    <div class="form-card">
+        <h2>Apply for this job</h2>
+        <p class="subtitle">Fields marked <span class="required">*</span> are required.</p>
+
+        <form id="applyForm">
+            <div class="section-heading">Personal Information</div>
+
+            <div class="two-col">
+                <div class="field">
+                    <label for="first_name">First Name <span class="required">*</span></label>
+                    <input type="text" id="first_name" name="first_name" placeholder="First name" required />
+                </div>
+                <div class="field">
+                    <label for="last_name">Last Name <span class="required">*</span></label>
+                    <input type="text" id="last_name" name="last_name" placeholder="Last name" required />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="you@university.edu" required />
+            </div>
+
+            <div class="field">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" />
+            </div>
+
+            <div class="section-heading">Location</div>
+
+            <div class="field">
+                <label for="city">Current City</label>
+                <input type="text" id="city" name="city" placeholder="City, State" />
+            </div>
+
+            <div class="section-heading">Links</div>
+
+            <div class="field">
+                <label for="linkedin">LinkedIn Profile</label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/..." />
+            </div>
+
+            <div class="field">
+                <label for="github">GitHub Profile</label>
+                <input type="url" id="github" name="github" placeholder="https://github.com/..." />
+            </div>
+
+            <div class="field">
+                <label for="website">Personal Website</label>
+                <input type="url" id="website" name="website" placeholder="https://yoursite.com" />
+            </div>
+
+            <button class="submit-btn" type="submit" data-hiretrack-submit>Submit Application</button>
+        </form>
+
+        <div id="success" class="success" data-hiretrack-success>
+            Your application has been submitted to Apple.
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("applyForm").addEventListener("submit", e => {
+        e.preventDefault();
+        document.getElementById("success").style.display = "block";
+    });
+</script>
+</body>
+</html>

@@ -87,46 +87,84 @@
         }, 7000);
     }
 
-    function saveDraftAndPrompt() {
+    function autoSaveApplication() {
         const payload = buildDraftFromPage();
 
         if (!payload.company && !payload.role) return;
 
-        chrome.runtime.sendMessage(
-            {
-                type: "HIRETRACK_SAVE_DRAFT",
-                payload
-            },
-            (response) => {
-                if (!response?.success) {
-                    console.error("HireTrack draft save failed", response?.error);
-                    return;
-                }
+        chrome.storage.local.get("internship_applications", result => {
+            const existing = result.internship_applications || [];
 
-                showToast(
-                    "Application detected. Draft saved to HireTrack.",
-                    () => {
-                        chrome.runtime.sendMessage({ type: "HIRETRACK_OPEN_DASHBOARD" });
-                    }
-                );
-            }
-        );
+            // Deduplicate: skip if same company + role + link saved in the last 2 minutes
+            const twoMinutesAgo = Date.now() - 2 * 60 * 1000;
+            const isDuplicate = existing.some(app =>
+                app.company === payload.company &&
+                app.role === payload.role &&
+                app.link === payload.link &&
+                app.createdAt > twoMinutesAgo
+            );
+            if (isDuplicate) return;
+
+            const newApp = {
+                id: crypto.randomUUID(),
+                ...payload,
+                createdAt: Date.now()
+            };
+
+            chrome.storage.local.set(
+                { internship_applications: [newApp, ...existing] },
+                () => {
+                    showToast(
+                        `"${newApp.company}" saved to HireTrack!`,
+                        () => chrome.runtime.sendMessage({ type: "HIRETRACK_OPEN_DASHBOARD" })
+                    );
+                }
+            );
+        });
     }
 
 
     // ─── AUTOFILL ─────────────────────────────────────────────────────────────
 
+    const INPUT_SELECTOR =
+        "input:not([type=hidden]):not([type=submit]):not([type=button])" +
+        ":not([type=checkbox]):not([type=radio]):not([type=file]), textarea";
+
+    // Returns the visible label text associated with an input element
+    function getLabelText(el) {
+        // <label for="id">
+        if (el.id) {
+            const lbl = document.querySelector(`label[for="${el.id}"]`);
+            if (lbl) return lbl.textContent.toLowerCase();
+        }
+        // Wrapping <label>
+        const parent = el.closest("label");
+        if (parent) return parent.textContent.toLowerCase();
+        // aria-labelledby
+        const labelledBy = el.getAttribute("aria-labelledby");
+        if (labelledBy) {
+            const lbl = document.getElementById(labelledBy);
+            if (lbl) return lbl.textContent.toLowerCase();
+        }
+        return "";
+    }
+
     function findInput(patterns) {
-        const attrs = ["name", "id", "placeholder", "aria-label", "autocomplete"];
-        const inputs = Array.from(document.querySelectorAll(
-            "input:not([type=hidden]):not([type=submit]):not([type=button]):not([type=checkbox]):not([type=radio]), textarea"
-        ));
+        const attrs = ["name", "id", "placeholder", "aria-label", "autocomplete", "data-testid", "data-field"];
+        const inputs = Array.from(document.querySelectorAll(INPUT_SELECTOR));
+
         for (const pattern of patterns) {
             for (const el of inputs) {
+                // Check HTML attributes
                 for (const attr of attrs) {
-                    const val = (el.getAttribute(attr) || "").toLowerCase();
-                    if (val.includes(pattern)) return el;
+                    const val = (el.getAttribute(attr) || "").toLowerCase().replace(/[\s_-]/g, "");
+                    const pat = pattern.replace(/[\s_-]/g, "");
+                    if (val.includes(pat)) return el;
                 }
+                // Check associated label text
+                const labelText = getLabelText(el).replace(/[\s_-]/g, "");
+                const pat = pattern.replace(/[\s_-]/g, "");
+                if (labelText.includes(pat)) return el;
             }
         }
         return null;
@@ -135,30 +173,70 @@
     function fillField(el, value) {
         if (!el || !value) return false;
         if (el.value === value) return false;
-        const proto = el.tagName === "TEXTAREA" ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
+        const proto = el.tagName === "TEXTAREA"
+            ? window.HTMLTextAreaElement.prototype
+            : window.HTMLInputElement.prototype;
         const setter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
         if (setter) setter.call(el, value);
         else el.value = value;
-        el.dispatchEvent(new Event("input", { bubbles: true }));
+        el.dispatchEvent(new Event("input",  { bubbles: true }));
         el.dispatchEvent(new Event("change", { bubbles: true }));
+        el.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true }));
+        el.dispatchEvent(new KeyboardEvent("keyup",   { bubbles: true }));
         return true;
     }
 
     function runAutofill(profile) {
-        const nameParts = (profile.name || "").trim().split(/\s+/);
-        const firstName = nameParts[0] || "";
-        const lastName = nameParts.slice(1).join(" ") || "";
+        const firstName = profile.firstName || "";
+        const lastName  = profile.lastName  || "";
+        const fullName  = [firstName, lastName].filter(Boolean).join(" ");
 
         const fieldDefs = [
-            { value: firstName,        patterns: ["firstname", "first-name", "first_name", "fname", "given-name", "givenname"] },
-            { value: lastName,         patterns: ["lastname", "last-name", "last_name", "lname", "surname", "family-name"] },
-            { value: profile.name,     patterns: ["fullname", "full-name", "full_name"] },
-            { value: profile.email,    patterns: ["email", "e-mail"] },
-            { value: profile.phone,    patterns: ["phone", "tel", "mobile", "cell"] },
-            { value: profile.linkedin, patterns: ["linkedin"] },
-            { value: profile.github,   patterns: ["github"] },
-            { value: profile.website,  patterns: ["website", "portfolio", "personal-site", "personalsite"] },
-            { value: profile.city,     patterns: ["city", "location"] },
+            {
+                value: firstName,
+                patterns: ["firstname", "first-name", "first_name", "fname",
+                           "given-name", "givenname", "given name", "first"]
+            },
+            {
+                value: lastName,
+                patterns: ["lastname", "last-name", "last_name", "lname",
+                           "surname", "family-name", "familyname", "family name", "last"]
+            },
+            {
+                value: fullName,
+                patterns: ["fullname", "full-name", "full_name", "full name",
+                           "yourname", "your name", "applicantname"]
+            },
+            {
+                value: profile.email,
+                patterns: ["email", "e-mail", "emailaddress", "email address"]
+            },
+            {
+                value: profile.phone,
+                patterns: ["phone", "tel", "mobile", "cell", "phonenumber",
+                           "phone number", "contact number"]
+            },
+            {
+                value: profile.linkedin,
+                patterns: ["linkedin", "linked-in", "linkedinurl", "linkedin url",
+                           "linkedin profile"]
+            },
+            {
+                value: profile.github,
+                patterns: ["github", "git-hub", "githuburl", "github url",
+                           "github profile"]
+            },
+            {
+                value: profile.website,
+                patterns: ["website", "portfolio", "personal-site", "personalsite",
+                           "personal site", "personal website", "portfoliourl",
+                           "websiteurl", "site url"]
+            },
+            {
+                value: profile.city,
+                patterns: ["city", "location", "currentlocation", "current location",
+                           "currentcity", "current city", "address"]
+            },
         ];
 
         let filled = 0;
@@ -168,10 +246,10 @@
             if (fillField(el, value)) filled++;
         }
 
-        // Fallback: plain "name" field if still empty
-        if (profile.name) {
+        // Fallback: a field whose only attribute hint is "name" and is still empty
+        if (fullName) {
             const el = findInput(["name"]);
-            if (el && !el.value && fillField(el, profile.name)) filled++;
+            if (el && !el.value && fillField(el, fullName)) filled++;
         }
 
         return filled;
@@ -187,7 +265,7 @@
             position: "fixed",
             bottom: "24px",
             right: "24px",
-            zIndex: "999999",
+            zIndex: "2147483647",
             background: "#3b82f6",
             color: "#ffffff",
             border: "none",
@@ -203,7 +281,6 @@
 
         btn.addEventListener("mouseenter", () => { btn.style.opacity = "0.85"; });
         btn.addEventListener("mouseleave", () => { btn.style.opacity = "1"; });
-
         btn.addEventListener("click", () => {
             const filled = runAutofill(profile);
             btn.remove();
@@ -218,25 +295,34 @@
         document.body.appendChild(btn);
     }
 
-    function checkAndShowAutofill() {
-        const hasInputs = document.querySelectorAll(
-            "input[type=text], input[type=email], input[type=tel], input[type=url], textarea"
-        ).length > 0;
-        if (!hasInputs) return;
+    function hasFormInputs() {
+        return document.querySelectorAll(INPUT_SELECTOR).length > 0;
+    }
 
+    function checkAndShowAutofill() {
+        if (!hasFormInputs()) return;
         chrome.storage.local.get("hiretrack_profile", result => {
             const profile = result.hiretrack_profile;
             if (!profile) return;
-            if (!profile.name || profile.name === "Your Name") return;
+            if (!profile.firstName) return;
             showAutofillButton(profile);
         });
     }
 
+    // Run immediately and also watch for dynamically loaded forms (SPAs)
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", checkAndShowAutofill);
     } else {
         checkAndShowAutofill();
     }
+
+    let autofillObserverTimer = null;
+    const autofillObserver = new MutationObserver(() => {
+        if (document.getElementById("hiretrack-autofill-btn")) return;
+        clearTimeout(autofillObserverTimer);
+        autofillObserverTimer = setTimeout(checkAndShowAutofill, 600);
+    });
+    autofillObserver.observe(document.body, { childList: true, subtree: true });
 
     chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         if (message?.type === "HIRETRACK_TRIGGER_AUTOFILL") {
@@ -261,7 +347,7 @@
 
 
         setTimeout(() => {
-            saveDraftAndPrompt();
+            autoSaveApplication();
         }, 300);
     });
 
@@ -269,7 +355,7 @@
         const successBanner = document.querySelector("[data-hiretrack-success]");
         if (successBanner && !successBanner.dataset.hiretrackHandled) {
             successBanner.dataset.hiretrackHandled = "true";
-            saveDraftAndPrompt();
+            autoSaveApplication();
         }
     });
 

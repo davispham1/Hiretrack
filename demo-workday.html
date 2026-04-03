@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Microsoft - Product Manager Intern · Workday</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f0f4f8;
+            color: #1a1a2e;
+        }
+        .navbar {
+            background: #0078d4;
+            padding: 0 32px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar span { color: white; font-weight: 700; font-size: 18px; }
+        .navbar small { color: rgba(255,255,255,0.7); font-size: 13px; }
+
+        .page { max-width: 780px; margin: 32px auto; padding: 0 16px; }
+
+        .job-banner {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            border-left: 5px solid #0078d4;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+        .job-banner h1 { font-size: 20px; margin-bottom: 6px; }
+        .job-meta { display: flex; gap: 20px; font-size: 13px; color: #555; flex-wrap: wrap; }
+        .job-meta span::before { content: "• "; }
+        .job-meta span:first-child::before { content: ""; }
+
+        .stepper {
+            display: flex;
+            gap: 0;
+            margin-bottom: 24px;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e2eaf3;
+            color: #888;
+            border-right: 2px solid white;
+        }
+        .step:last-child { border-right: none; border-radius: 0 6px 6px 0; }
+        .step:first-child { border-radius: 6px 0 0 6px; }
+        .step.active { background: #0078d4; color: white; }
+        .step.done { background: #c3daf5; color: #0078d4; }
+
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+        .form-card h2 { font-size: 17px; font-weight: 700; margin-bottom: 20px; color: #0078d4; }
+
+        .field-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .field { margin-bottom: 16px; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #444;
+        }
+        .req { color: #c00; }
+        input[type=text],
+        input[type=email],
+        input[type=tel],
+        input[type=url] {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #b8c5d0;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            background: #fafcff;
+        }
+        input:focus {
+            border-color: #0078d4;
+            box-shadow: 0 0 0 2px rgba(0,120,212,0.15);
+            background: white;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #e8eef3;
+            margin: 20px 0;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .btn-secondary {
+            background: white;
+            color: #0078d4;
+            border: 1px solid #0078d4;
+            padding: 10px 22px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-primary:hover { background: #005ea2; }
+
+        .success {
+            display: none;
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #e8f4fd;
+            border-radius: 6px;
+            color: #0078d4;
+            font-weight: 600;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>Workday</span>
+    <small>· Microsoft Careers</small>
+</div>
+
+<div class="page">
+    <div class="job-banner">
+        <h1 data-hiretrack-role>Product Manager Intern</h1>
+        <div class="job-meta">
+            <span data-hiretrack-company>Microsoft</span>
+            <span data-hiretrack-location>Redmond, WA</span>
+            <span>Summer 2025</span>
+            <span>Full-time</span>
+        </div>
+    </div>
+
+    <div class="stepper">
+        <div class="step done">1 · My Information</div>
+        <div class="step active">2 · My Experience</div>
+        <div class="step">3 · Application Questions</div>
+        <div class="step">4 · Review</div>
+    </div>
+
+    <div class="form-card">
+        <h2>My Experience</h2>
+
+        <form id="applyForm">
+            <div class="field-group">
+                <div class="field">
+                    <label>First Name <span class="req">*</span></label>
+                    <input type="text" aria-label="First Name" name="fname" placeholder="First name" required />
+                </div>
+                <div class="field">
+                    <label>Last Name <span class="req">*</span></label>
+                    <input type="text" aria-label="Last Name" name="lname" placeholder="Last name" required />
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Email Address <span class="req">*</span></label>
+                <input type="email" aria-label="Email Address" name="email" placeholder="you@email.com" required />
+            </div>
+
+            <div class="field">
+                <label>Mobile Phone</label>
+                <input type="tel" aria-label="Mobile Phone" name="mobile" placeholder="+1 (555) 000-0000" />
+            </div>
+
+            <hr class="divider" />
+
+            <div class="field">
+                <label>Current Location</label>
+                <input type="text" aria-label="Current Location" name="currentlocation" placeholder="City, State" />
+            </div>
+
+            <div class="field">
+                <label>LinkedIn Profile URL</label>
+                <input type="url" aria-label="LinkedIn Profile URL" name="linkedin" placeholder="https://linkedin.com/in/..." />
+            </div>
+
+            <div class="field">
+                <label>GitHub URL</label>
+                <input type="url" aria-label="GitHub URL" name="github" placeholder="https://github.com/..." />
+            </div>
+
+            <div class="field">
+                <label>Personal Website</label>
+                <input type="url" aria-label="Personal Website" name="website" placeholder="https://..." />
+            </div>
+
+            <div class="form-footer">
+                <button class="btn-secondary" type="button">Save for later</button>
+                <button class="btn-primary" type="submit" data-hiretrack-submit>Next: Application Questions →</button>
+            </div>
+        </form>
+
+        <div id="success" class="success" data-hiretrack-success>
+            Application submitted to Microsoft! Check your email for confirmation.
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("applyForm").addEventListener("submit", e => {
+        e.preventDefault();
+        document.getElementById("success").style.display = "block";
+    });
+</script>
+</body>
+</html>

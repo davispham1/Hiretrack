@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Amazon - Software Dev Engineer Intern - Indeed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Noto Sans", Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 32px 16px;
+            color: #2d2d2d;
+        }
+        .container { max-width: 680px; margin: 0 auto; }
+
+        /* Breadcrumb */
+        .breadcrumb { font-size: 13px; color: #767676; margin-bottom: 16px; }
+        .breadcrumb a { color: #2557a7; text-decoration: none; }
+
+        /* Job card */
+        .job-card {
+            background: white;
+            border: 1px solid #d4d2d0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .job-card h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .company-name { font-size: 15px; color: #2557a7; font-weight: 600; }
+        .location { font-size: 13px; color: #767676; margin-top: 4px; }
+        .tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .tag {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Form card */
+        .form-card {
+            background: white;
+            border: 1px solid #d4d2d0;
+            border-radius: 8px;
+            padding: 24px;
+        }
+        .form-card h2 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+        .form-card p { font-size: 13px; color: #767676; margin-bottom: 20px; }
+
+        .field { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .required { color: #cc1f36; }
+        input[type=text],
+        input[type=email],
+        input[type=tel],
+        input[type=url] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #b4b0ab;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus { border-color: #2557a7; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #767676;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 24px 0 14px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .apply-btn {
+            background: #2557a7;
+            color: white;
+            border: none;
+            padding: 13px 0;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .apply-btn:hover { background: #1a3f7a; }
+
+        .success {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background: #e6f4ea;
+            border-left: 4px solid #34a853;
+            border-radius: 4px;
+            color: #1a5c2a;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="breadcrumb">
+        <a href="#">Indeed</a> › <a href="#">Software Engineering Jobs</a> › Apply
+    </div>
+
+    <div class="job-card">
+        <h1 data-hiretrack-role>Software Dev Engineer Intern</h1>
+        <div class="company-name" data-hiretrack-company>Amazon</div>
+        <div class="location" data-hiretrack-location>Seattle, WA 98109</div>
+        <div class="tags">
+            <span class="tag">Internship</span>
+            <span class="tag">Full-time</span>
+            <span class="tag">$8,000/mo</span>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <h2>Apply with your resume</h2>
+        <p>Fields marked with <span class="required">*</span> are required.</p>
+
+        <form id="applyForm">
+            <div class="section-title">Personal Information</div>
+
+            <div class="two-col">
+                <div class="field">
+                    <label>First name <span class="required">*</span></label>
+                    <input type="text" name="firstname" placeholder="First name" required />
+                </div>
+                <div class="field">
+                    <label>Last name <span class="required">*</span></label>
+                    <input type="text" name="lastname" placeholder="Last name" required />
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Email <span class="required">*</span></label>
+                <input type="email" name="email" placeholder="yourname@email.com" required />
+            </div>
+
+            <div class="field">
+                <label>Phone number</label>
+                <input type="tel" name="phone" placeholder="(555) 555-5555" />
+            </div>
+
+            <div class="field">
+                <label>City / Location</label>
+                <input type="text" name="city" placeholder="City, State" />
+            </div>
+
+            <div class="section-title">Online Presence</div>
+
+            <div class="field">
+                <label>LinkedIn URL</label>
+                <input type="url" name="linkedin" placeholder="https://linkedin.com/in/yourname" />
+            </div>
+
+            <div class="field">
+                <label>GitHub URL</label>
+                <input type="url" name="github" placeholder="https://github.com/yourname" />
+            </div>
+
+            <div class="field">
+                <label>Portfolio / Website</label>
+                <input type="url" name="website" placeholder="https://yourwebsite.com" />
+            </div>
+
+            <button class="apply-btn" type="submit" data-hiretrack-submit>
+                Submit Application
+            </button>
+        </form>
+
+        <div id="success" class="success" data-hiretrack-success>
+            Application submitted! Amazon's recruiting team will be in touch.
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("applyForm").addEventListener("submit", e => {
+        e.preventDefault();
+        document.getElementById("success").style.display = "block";
+    });
+</script>
+</body>
+</html>
