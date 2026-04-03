@@ -19,12 +19,11 @@ A simple job application tracker built to help organize applications, track stat
 
 ## Getting Started
 
-### 1. Clone the repo
-
-
+### 1. Clone the repository
 git clone https://github.com/davispham1/Internship-Tracker.git
+cd Hiretrack
 npm install
 npm run dev
 
-### build 
+### 2.Build (for extension)
 npm run build
